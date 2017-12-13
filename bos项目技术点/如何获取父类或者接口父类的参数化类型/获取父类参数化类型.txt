@@ -1,0 +1,3 @@
+Type genericSuperclass = this.getClass().getGenericSuperclass();
+ParameterizedType parameterizedType = (ParameterizedType) genericSuperclass;
+Class<T> modelClass = (Class<T>) parameterizedType.getActualTypeArguments()[0];

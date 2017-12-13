@@ -1,0 +1,72 @@
+WebService解决不同系统之间的数据交互。
+
+实现WebService的技术框架
+	CXF		Hessian		dubbo
+
+CXF
+	jax-ws(XML)
+		原理
+			wsdl
+			soap
+			http
+		服务端
+			1.导入jar包
+			2.配置web.xml CXFServlet
+			3.编写对应的业务操作(Service Dao domain)
+				@WebService
+				@WebMethod
+			
+			4.配置applicationContext.xml
+				<jaxws:server id="" address="" serviceClass="接口全路径">
+					<jaxws:serviceBean>
+						<bean class="接口实现类" />
+					</jaxws:serviceBean>
+				</jaxws:server>
+			5.访问路径
+				http://ip:port/项目名/web.xml->CXFServlet->url-pattern/applicationContext.xml->address
+		客户端
+			1.导入对应的jar包
+			2.配置applicationContext.xml
+				<jaxws:client id="xxx" serviceClass="接口全路径" address="http://ip:port/项目名/web.xml->CXFServlet->url-pattern/applicationContext.xml->address">
+				
+				</jaxws:client>
+			3.在对应的类中注入xxx
+				@Autowired
+				private IXxxService xxx;
+	
+	jax-rs(XML/JSON)
+		原理
+			http
+			以发送请求类型决定CRUD操作
+		服务端
+			1.导入jar包
+			2.配置web.xml CXFServlet
+			3.编写对应的业务操作(Service Dao domain)
+				@Path  //指定访问路径
+				@Produces 生产数据类型({"applicationContext/xml",MediaType.APPLICATION_JSON})
+				@Consumes 消费数据类型({"applicationContext/xml",MediaType.APPLICATION_JSON})
+						？？？？？
+				@GET @POST @PUT @DELETE
+				http://ip:port/项目名/..../1/zs
+				@PathParam
+				http://ip:port/项目名?id=1&name=zs&x=y...
+				@QueryParam
+			4.配置applicationContext.xml
+				<jaxrs:server id="" address="">
+					<jaxrs:serviceBeans>
+						<bean class="" />
+					</jaxrs:serviceBeans>
+				</jaxrs:server>
+			5.访问路径
+				http://ip:port/项目名/web.xml->CXFServlet->url-pattern/applicationContext.xml->address/service->method->@Path/[参数]
+			注意：
+				约定优于编码，基本类型，我们使用他们的封装类
+				模型类上加 @XmlRootElement
+					<Customer>
+						
+					</Customer>
+		客户端
+			WebClient.create(url).type().accept().post()|put()|delete()|get()|getCollection()
+			
+			
+			

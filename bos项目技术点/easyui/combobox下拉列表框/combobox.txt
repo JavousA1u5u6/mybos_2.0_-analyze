@@ -1,0 +1,3 @@
+1、 需要给 input 输入框 设置 class=”easyui-combobox”
+2、 设置三个属性 url 获取列表数据、textField 显示内容字段名、valueField 生成选项
+value 属性依据字段名

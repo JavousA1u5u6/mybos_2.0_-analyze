@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  
+    xsi:schemaLocation="  
+    http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">  
+  
+  
+  
+    <!-- spring自动任务调度器配置 -->  
+  
+  
+    <!-- 要调用的工作类 -->  
+    <bean id="quartzJob1" class="cn.hydom.ztc.ztc_cp.quartz.QuartzJob1"></bean>  
+    <bean id="quartzJob2" class="cn.hydom.ztc.ztc_cp.quartz.QuartzJob2"></bean>  
+    <bean id="quartzJob3" class="cn.hydom.ztc.ztc_cp.quartz.QuartzJob2"></bean>  
+      
+    <!-- 任务配置列表 -->  
+    <bean id="jobtask1" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 调用的类 -->  
+        <property name="targetObject">  
+            <ref bean="quartzJob1" />  
+        </property>  
+        <!-- 调用类中的方法 -->  
+        <property name="targetMethod">  
+            <value>work</value>  
+        </property>  
+         <!-- 是否允许任务并发执行。当值为false时，表示必须等到前一个线程处理完毕后才再启一个新的线程 -->  
+         <property name="concurrent" value="false"/>  
+    </bean>   
+    <bean id="jobtask2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 调用的类 -->  
+        <property name="targetObject">  
+            <ref bean="quartzJob2" />  
+        </property>  
+        <!-- 调用类中的方法 -->  
+        <property name="targetMethod">  
+            <value>work</value>  
+        </property>  
+    </bean>   
+    <bean id="jobtask3" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 调用的类 -->  
+        <property name="targetObject">  
+            <ref bean="quartzJob3" />  
+        </property>  
+        <!-- 调用类中的方法 -->  
+        <property name="targetMethod">  
+            <value>work</value>  
+        </property>  
+    </bean>   
+      
+      
+      
+      
+      
+    <!-- 触发器配置  时间指定 -->  
+    <bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="jobtask1"></property>  
+        <!-- cron表达式 -->  
+        <property name="cronExpression">  
+            <!-- 每隔10秒执行一次 <value>0/10 * * * * ?</value> -->  
+            <!-- 每天每隔5分钟执行一次 <value>0 0/5 * * * ?</value> -->  
+             <value>0 0/5 * * * ?</value>  
+            <!-- 每天上午8点执行一次 <value>0 0 8 * * ?</value>-->  
+            <!-- 在每天下午16点到下午16:59期间的每1分钟触发 <value>0 * 16 * * ?</value> -->  
+        </property>  
+    </bean>  
+    <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="jobtask2"></property>  
+        <!-- cron表达式 -->  
+        <property name="cronExpression">  
+            <!-- 每隔10秒执行一次 <value>0/10 * * * * ?</value> -->  
+            <!-- 每天每隔10分钟执行一次 <value>0 0/10 * * * ?</value> -->  
+            <!-- <value>0 0/10 * * * ?</value> -->  
+            <!-- 每天上午8点执行一次 <value>0 0 8 * * ?</value>-->  
+            <!-- 在每天下午16点到下午16:59期间的每1分钟触发 <value>0 * 16 * * ?</value> -->  
+            <!-- 每天凌晨1点执行一次 -->  
+            <value>0 0 1 * * ?</value>  
+        </property>  
+    </bean>  
+    <bean id="cronTrigger3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">  
+        <property name="jobDetail" ref="jobtask3"></property>  
+        <!-- cron表达式 -->  
+        <property name="cronExpression">  
+            <!-- 每月最后一天23点30分执行一次 -->  
+            <value>0 30 23 L * ?</value>  
+        </property>  
+    </bean>  
+      
+    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->  
+    <bean id="startQuertz" lazy-init="false" autowire="no"  
+        class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>  
+                <!-- 触发器列表    -->  
+                <ref bean="cronTrigger1" />  
+                <ref bean="cronTrigger2" />  
+                <ref bean="cronTrigger3" />  
+            </list>  
+        </property>  
+    </bean>  
+  
+</beans> 

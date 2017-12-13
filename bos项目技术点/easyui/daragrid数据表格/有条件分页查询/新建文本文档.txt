@@ -1,0 +1,41 @@
+
+前台:
+问题1:怎样将整个表单的数据 作为参数发送到服务器?
+
+1、 制作查询按钮，点击按钮 显示快递员查询表单（窗口）
+
+2、 将查询窗口条件，绑定到数据表格上，让数据表格在发送请求时，自动携带条件
+查询 jquery easyui datagrid 数据表格 api
+
+1.
+var parms = $("#xxxForm").serializeJson();
+
+2.
+var parms =$("#xxxForm").serialize();
+("#grid").datagrid('load',parms);
+
+$("#xxxxxwindow").window('close');
+
+
+
+后台:
+
+1.创建specifiation接口的实现对象接收参数
+
+2.重写toPredicate(root,query,cb);
+
+list集合收集条件对象
+	//courierNum = ?
+predicate p1 =  cb .xxx (root.get("xxxxx").as(xxx.class),target.getxxxx()) ;
+
+list.add(p1);
+
+//当涉及到多表查询时
+
+ 使用root.join("standard",joinType.inner);
+
+
+
+return cb.and(list.toarray(new predicate[0]));
+
+dao继承   jpaspecificationExecutor 接口

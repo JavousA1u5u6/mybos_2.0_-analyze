@@ -1,0 +1,5 @@
+1、 datagrid 在页面加载后 会自动向 url 地址发送一次请求
+传递参数 page 当前页码 和 rows 每页显示的记录条数 到服务器
+2、 spring data 提供 Pageable 对象（PageRequest）接收两个参数
+3、 调用 spring data 中 Page findAll(Pageable) 方法查询 总记录数 和 当前页数据
+4、 将 Page 中数据封装自定义 Map 集合 total 和 rows 转换为 json 返回客户端

@@ -1,0 +1,101 @@
+Query
+	Query query = session.createQuery(hql);
+	
+	query.list();
+	query.uniqueResult();
+	基本检索	
+		select * from t_customer
+		select cm from Customer cm
+	排序检索
+		select * from t_customer order by column desc/asc
+		select cm from Customer cm order by property desc/asc
+	条件检索
+		select * from t_customer where colum1 = :name
+		from Customer where property = :name
+		query.setParameter(idx,object);
+		query.setParameter(name,object);
+		query.setXxxx(idx,object);
+		query.setXxxx(name,object);
+	分页检索
+		select * from t_customer limit x,y
+		三层嵌套查询
+		setFirstResult	x = (pageNo-1)*pageSize
+		SetMaxResults	y = pageSize
+	分组统计
+		select sum(columy) from t_customer group  by  columx
+		sum  count avg  max min 
+		
+	投影检索
+		select Colum1,column2 from t_customer
+		select property2,property1 from Customer
+		obj[0] = property2
+		obj[1] = property1
+		
+	命名检索
+		xxx.hbm.xml
+		@NamedQuery(name="",query="")
+QBC
+	Criteria c = session.createCriteria(模型类.class);
+	c.list();
+	c.uniqueResult();
+	基本检索
+	排序检索
+		c.addOrder(Order.des/asc("属性名"));
+	条件检索
+		Restrictions.eq
+	分页检索
+		setFirstResult	x = (pageNo-1)*pageSize
+		SetMaxResults	y = pageSize
+	分组统计
+		Projection  Projections
+			
+	
+	投影检索
+	命名检索
+SQLQuery
+	session.createSQLQuery(sql);
+	sqlQuery.list();
+	sqlQuery.uniqueResult();
+	Object[]
+	sqlQuery.addEntity(对象.class);
+	基本检索
+	排序检索
+		select * from t_customer order by column desc/asc
+	条件检索
+		select * from t_customer where column   = ?
+	分页检索
+		
+	分组统计
+	投影检索
+	命名检索
+		<query name="">from Customer</query>
+		@NamedQuery(name="",query="")
+	
+	
+1.如何编写对应的hql语句
+2.相应的查询返回的结果
+	
+交叉连接
+
+内连接
+	显示内连接
+		FROM Customer t INNER JOIN t.orders
+		
+		FROM Order o INNER JOIN o.c
+		返回一个List<Object[]>
+					object[0] --- Order
+					object[1] --- Customer
+	隐士内连接
+		普通单表查询
+		返回值 
+	迫切内连接
+		FROM Customer t INNER JOIN fetch t.orders
+		
+		FROM Order o INNER JOIN fetch o.c
+		返回一个 对象集合
+				order.setCustomer(object[1]);
+
+外连接
+	左外连接
+	迫切左外连接
+	右外连接

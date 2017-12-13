@@ -1,0 +1,10 @@
+public class Menu{
+	
+	@onetomay(mappedBy = "parentMenu")
+	private Menu pagernMenu;
+
+	@manytoone()
+	@joinColumn(name=)	
+	private Set<Menu> childMenu;
+
+}

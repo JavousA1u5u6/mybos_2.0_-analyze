@@ -1,0 +1,63 @@
+* 什么样的JS代码写到 
+	$(function(){
+		
+	});
+	当页面加载完成之后，执行这里边的代码
+	
+	<script>
+		$(function(){
+			$("#id").click(function(){
+				alert('hehe');
+			});
+		});
+	
+		
+	</script>
+	
+	<input id='btn'>
+	
+	
+
+  什么样的代码直接写到<script> 
+  
+  function fun(){
+  
+  }
+
+html和json的区别?
+
+html :快 但功能弱 一般用于互联网系统
+
+jsp: 慢  但功能强   一般用于后台系统的制作
+
+
+一般进了公司该做的事情?
+
+
+FTP服务器地址
+SVN账号
+
+
+1.JDK
+2.eclipse
+3.PLSQL Developer 客户端工具
+4.Maven
+5.ProwerDesinger:
+6.SVN/GIT , eclipse插件
+
+
+在对于查询数据,因为数据库的查询 就比如简单的模糊查询  它需要条条去匹配 在面对百万数据流量时 有时候效率会很慢
+
+所以我们使用了elasticsearch来辅助查询   使用它相当于 另建了一个数据库  不过这个数据库不仅有索引
+
+它可以对数据进行分词  所以查询速度还是效率就很快   
+
+
+
+当具有多个任务  需要定制多个定时器  只需要在原有的设置上添加即可
+
+java c  编译
+
+java p  反编译         
+
+

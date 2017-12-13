@@ -1,0 +1,42 @@
+1.导入
+第一步： 在 common_parent 导入 ehcache maven 坐标
+
+第二步： 使用 ehcache ，导入 ehcache.xml 配置文件
+
+解压 ehcache-core.jar 包 ，将 ehcache-failsafe.xml 复制 src/main/resources
+改名 ehcache.xml
+自定义缓存区
+
+
+第三步： 配置 spring 整合 ehcache
+将 ehcacheManager 交给 spring 管理
+
+默认 Ehcache 提供 CacheManager 提供 addCache()、getCache() 这些方法，原理在内存
+保存 key-value
+
+第四步： 配置 shiro 封装缓存管理器
+
+
+第五步： 将 shiro 的缓存管理器，注入到安全管理器中
+应用程序代码 – Subject – SecurityManager – Realm (查询认证和授权数据)
+
+
+第六步： 对认证数据、授权数据 哪些进行缓存 ？
+配置 Realm
+
+(注意： 使需要缓存对象，实现 Serializable 接口
+java.io.NotSerializableException: cn.itcast.bos.domain.system.User)
+
+
+第四步： 配置 spring 缓存管理器，封装 ehcache 自带 CacheManager
+
+
+第五步：在 applicationContext-cache.xml 引入 cache 名称空间
+
+
+第六步： 激活 spring 缓存注解
+
+
+第七步： 在被 spring 管理 bean 对象方法上 使用@Cacheable 、@CacheEvict
+@Cacheable 应用缓存区，对方法返回结果进行缓存 ---- 用于查询方法
+@CacheEvict 清除缓存区数据 --- 用于 增加、修改、删除 方法

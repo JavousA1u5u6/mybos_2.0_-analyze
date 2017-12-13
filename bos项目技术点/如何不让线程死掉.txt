@@ -1,0 +1,12 @@
+while (true) {
+			// 不能让junit线程死掉
+		}
+
+
+给它一个死循环
+
+
+
+如果你不想CPU一直负载，也不想让线程运行一次就结束，那么你可以使用阻塞。
+system.threading 命名空间中有 AutoResetEvent 类。waitone可以让线程挂起等待信号，信号来了，继续往下走。set给出信号，让你wait的线程继续执行。
+public AutoResetEvent are = new AutoResetEvent(false);

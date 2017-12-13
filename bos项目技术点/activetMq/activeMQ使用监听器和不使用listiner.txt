@@ -1,0 +1,28 @@
+不适用监听器  只会对已经存在与  生产者队列中的数据进行消费
+
+后续必须手动去调用方法进行消费
+
+while (true) {
+			TextMessage message = (TextMessage) messageConsumer.receive(10000);
+			if (message != null) {
+				System.out.println(message.getText());
+			} else {
+				break;
+			}
+		}
+	
+
+使用监听器  后续再有数据进行生产者队列
+
+iiu可以自动调用onmessage()去消费
+
+
+	// 每次接收消息，自动调用 onMessage
+			public void onMessage(Message message) {
+				TextMessage textMessage = (TextMessage) message;
+				try {
+					System.out.println(textMessage.getText());
+				} catch (JMSException e) {
+					e.printStackTrace();
+				}
+			}

@@ -1,0 +1,14 @@
+1、 Authentication 认证 ---- 用户登录，身份识别 who are you?
+2、 Authorization 授权 --- 用户具有哪些权限、角色 what can you do ?
+3、 Cryptography 安全数据加密
+4、 Session Management 会话管理
+5、 Web Integration web 系统集成
+6、 Interations 集成其它应用，spring、缓存框架
+
+
+ApplicationCode 用户编写代码
+Subject 就是 shiro 管理的用户
+SecurityManager 安全管理器，是 shiro 权限控制核心对象， 在编程时，只需要操作
+Subject 方法， 底层调用 SecurityManager 方法，无需直接编程操作 SecurityManager
+Realm 应用程序和安全数据之间连接器 ，应用程序 进行权限控制读取安全数据（数据
+表、文件、网路 … ），通过 Realm 对象完成

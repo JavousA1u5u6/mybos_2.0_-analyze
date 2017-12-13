@@ -1,0 +1,18 @@
+spring data的出现时为了 统一和简化持久层的各种实现技术,为此spring data提供了一套
+标准api  和 不同持久层技术的实现
+
+
+ spring-data-commons 一套标准 API  (repository crudxxxx , pagingandsortingxxx)
+spring-data-jpa 基于整合 JPA 实现(jparepository  jpaspecifiatio)
+
+
+我们所做的只需要自定义一个接口来继承  JpaRepository 接口
+
+底层就回通过一些技术  去获取方法名  方法的参数  继承接口的参数 
+
+通过这些便可以组成一条hql  反射去执行
+
+
+Hibernate 是 JPA 接口规范实现
+SessionFactory --- JPA EntityManagerFactory
+Session --- JPA EntityManager

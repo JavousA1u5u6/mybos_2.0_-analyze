@@ -1,0 +1,20 @@
+1.安装elasticSearch服务器
+
+2.运行.bat文件
+
+
+配置java_Home 环境变量
+
+
+访问 http://127.0.0.1:9200
+
+
+这样完了之后其实就可以使用elasticSearch  但是只有一个光秃秃的界面  
+
+
+呀 这哥们丑死了  咋办啊 来 我们安装一个插件  es head
+
+
+%elasticsearch%/bin/plugin.bat install mobz/elasticsearch-head
+
+访问 http://localhost:9200/_plugin/head/

@@ -1,0 +1,12 @@
+1.为什么使用ehcache而不使用redis?
+
+	因为shiro默认对ehcache支持,在后台管理系统中使用ehcache很常见
+
+2.主流你知道的缓存有哪几种?
+
+	redis, ehcache(出自于hibernate 一般作为hibernate的二级缓存),
+
+JBossCache(复制的事务处理缓存):轻松进行jboss服务器之间的集群操作
+
+
+OScache:jsp标记应用   jsp页面之间实现快速内存缓存的功能

@@ -1,0 +1,12 @@
+add / remove 			begin / end				create / destroy 	
+insert / delete			first / last       		get / set
+increment / decrement	put / get					add / delete       
+lock / unlock      		open / close				min / max
+old / new				start / stop				next / previous
+source / target			show / hide				send / receive
+source / destination		cut / paste				up / down
+Ê¾Àý£º
+int  minSum;
+int  maxSum;
+int  addUser( BYTE *userName );
+int  deleteUser( BYTE *userName );

@@ -1,0 +1,113 @@
+public class CreateExcel {
+ 24 
+ 25     public static void main(String[] args) throws IOException, InterruptedException {
+ 26         Workbook[] wbs = new Workbook[] { new HSSFWorkbook(), new XSSFWorkbook() };
+ 27         for (int i = 0; i < wbs.length; i++) {
+ 28             Workbook workbook = wbs[i];
+ 29             // 得到一个POI的工具类
+ 30             CreationHelper createHelper = workbook.getCreationHelper();
+ 31 
+ 32             // 在Excel工作簿中建一工作表，其名为缺省值, 也可以指定Sheet名称
+ 33             Sheet sheet = workbook.createSheet();
+ 34             // Sheet sheet = workbook.createSheet("Sheet1");
+ 35 
+ 36             // 用于格式化单元格的数据
+ 37             DataFormat format = workbook.createDataFormat();
+ 38 
+ 39             // 设置字体
+ 40             Font font = workbook.createFont();
+ 41             font.setFontHeightInPoints((short) 20); // 字体高度
+ 42             font.setColor(Font.COLOR_RED); // 字体颜色
+ 43             font.setFontName("黑体"); // 字体
+ 44             font.setBoldweight(Font.BOLDWEIGHT_BOLD); // 宽度
+ 45             font.setItalic(true); // 是否使用斜体
+ 46             // font.setStrikeout(true); //是否使用划线
+ 47 
+ 48             // 设置单元格类型
+ 49             CellStyle cellStyle = workbook.createCellStyle();
+ 50             cellStyle.setFont(font);
+ 51             cellStyle.setAlignment(CellStyle.ALIGN_CENTER); // 水平布局：居中
+ 52             cellStyle.setWrapText(true);
+ 53 
+ 54             CellStyle cellStyle2 = workbook.createCellStyle();
+ 55             cellStyle2.setDataFormat(format.getFormat("＃, ## 0.0"));
+ 56 
+ 57             CellStyle cellStyle3 = workbook.createCellStyle();
+ 58             cellStyle3.setDataFormat(format.getFormat("yyyy-MM-dd HH:mm:ss"));
+ 59 
+ 60             // 添加单元格注释
+ 61             // 创建Drawing对象,Drawing是所有注释的容器.
+ 62             Drawing drawing = sheet.createDrawingPatriarch();
+ 63             // ClientAnchor是附属在WorkSheet上的一个对象， 其固定在一个单元格的左上角和右下角.
+ 64             ClientAnchor anchor = createHelper.createClientAnchor();
+ 65             // 设置注释位子
+ 66             anchor.setRow1(0);
+ 67             anchor.setRow2(2);
+ 68             anchor.setCol1(0);
+ 69             anchor.setCol2(2);
+ 70             // 定义注释的大小和位置,详见文档
+ 71             Comment comment = drawing.createCellComment(anchor);
+ 72             // 设置注释内容
+ 73             RichTextString str = createHelper.createRichTextString("Hello, World!");
+ 74             comment.setString(str);
+ 75             // 设置注释作者. 当鼠标移动到单元格上是可以在状态栏中看到该内容.
+ 76             comment.setAuthor("H__D");
+ 77 		//调取service
+			list<Area> list = xxxservice.findall();
+		for(Area area :list){
+			 // 定义几行
+ 79          
+			
+ 80                 // 创建行
+ 81                 Row row = sheet.createRow(rownum);
+ 82                 // 创建单元格
+ 83                 Cell cell = row.createCell((short) 1);
+ 84                 cell.setCellValue(area.getxxx());// 设置单元格内容
+ 85                 cell.setCellStyle(cellStyle);// 设置单元格样式
+ 86                 cell.setCellType(Cell.CELL_TYPE_STRING);// 指定单元格格式：数值、公式或字符串
+ 87                 cell.setCellComment(comment);// 添加注释
+ 88 
+ 89                 // 格式化数据
+ 90                 Cell cell2 = row.createCell((short) 2);
+ 91                 cell2.setCellValue(area.getxxx());
+ 92                 cell2.setCellStyle(cellStyle2);
+ 93 
+ 94                 Cell cell3 = row.createCell((short) 3);
+ 95                 cell3.setCellValue(area.getxxx());
+ 96                 cell3.setCellStyle(cellStyle3);
+    Cell cell2 = row.createCell((short) 4);
+ 91                 cell2.setCellValue(area.getxxx());
+ 92                 cell2.setCellStyle(cellStyle2);
+    Cell cell2 = row.createCell((short) 5);
+ 91                 cell2.setCellValue(area.getxxx());
+ 92                 cell2.setCellStyle(cellStyle2);
+ 97 
+ 98                 sheet.autoSizeColumn((short) 0); // 调整第一列宽度
+ 99                 sheet.autoSizeColumn((short) 1); // 调整第二列宽度
+100                 sheet.autoSizeColumn((short) 2); // 调整第三列宽度
+101                 sheet.autoSizeColumn((short) 3); // 调整第四列宽度
+102 
+103            
+		}
+ 78            
+104 
+105             // 合并单元格
+106             sheet.addMergedRegion(new CellRangeAddress(1, // 第一行（0）
+107                     2, // last row（0-based）
+108                     1, // 第一列（基于0）
+109                     2 // 最后一列（基于0）
+110             ));
+111 
+112             // 保存
+113             String filename = "C:/Users/H__D/Desktop/workbook.xls";
+114             if (workbook instanceof XSSFWorkbook) {
+115                 filename = filename + "x";
+116             }
+117 
+118             FileOutputStream out = new FileOutputStream(filename);
+119             workbook.write(out);
+120             out.close();
+121         }
+122     }
+123 
+124 }

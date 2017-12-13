@@ -1,0 +1,46 @@
+    $(function () {  
+                $(".uploadfile").upload({  
+                    action: 'CourseXMLFileUploadHander.ashx',  
+                    name: 'xml',  
+                    params: {  
+                        'type': 'uploadCourseXMLFile',  
+                        'rand': Math.random()  
+                    },  
+                    onSelect: function (self, element) {  
+                        this.autoSubmit = false;
+			var filename = this.filname();  
+                        var re = new RegExp("(xml){1}quot;, "i");  
+      
+                        if (!re.test(this.filename())) {  
+                            alert("Only xml file can be uploaded");  
+                        }  
+                        else {  
+                            this.submit();  
+                        }  
+                    },  
+                    onSubmit: function (self, element) {  
+                        $('.uploadfile').hide();  
+                        $('#ajax_update').parent().show();  
+                        //alert('Uploading file...');  
+                    },  
+                    onComplete: function (data, self, element) {  
+                        $('#ajax_update').parent().hide();  
+                        $('.uploadfile').show();  
+                        self.resetInput();  
+                        try {  
+                            var ret = data;  
+                            if (ret.indexOf("exception") >= 0) {  
+                                alert('Upload file exception: ' + eval(data)[0].exception);  
+                            }  
+                            else {  
+                                showSuccess('File is successfully Load.');  
+      
+                                uploadSuccess(ret);  
+      
+                            }  
+                        } catch (err) {  
+                            alert(data);  
+                        }  
+                    }  
+                });  
+            });  

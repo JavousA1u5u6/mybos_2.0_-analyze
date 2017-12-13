@@ -1,0 +1,12 @@
+-- Create the user
+create user BOS
+identified by ""
+default tablespace SYSTEM
+temporary tablespace TEMP
+profile DEFAULT
+password expire;
+-- Grant/Revoke role privileges
+grant connect to BOS;
+grant resource to BOS;
+-- Grant/Revoke system privileges
+grant unlimited tablespace to BOS;

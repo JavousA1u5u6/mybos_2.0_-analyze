@@ -1,0 +1,5 @@
+需要注意事项：
+1、 必须同步提交 form 表单
+2、 Form 表单编码方式 multipart/form-data
+3、 提交方式必须为 post
+4、 上传文件对应 input type=”file” 元素要提供 name 属性

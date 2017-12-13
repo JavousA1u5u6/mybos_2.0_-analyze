@@ -1,0 +1,14 @@
+1.导入shiro框架需要的pom坐标  shiro _all
+2.web.xml配置shiro的前端过滤器 shiroFilter (需要配置再struts2框架之前)
+3.配置applicationContext.xml bean id ="shiroFilter"
+	未认证可访问  授权后可访问
+4.用户点击登陆-->过滤器拦住 -->校验user -->userAction-->调用subject.login(token)
+-->securityManager-->自定义继承AuthorizingRealm的realm-->doGetAuthenticationInfo(认证)
+-->用户名验证-->null(返回null)-->!null-->return new SimpleAuthenticationInfo(user, user.getPassword(),
+					getName());
+
+-->当返回用户密码时，securityManager安全管理器，自动比较返回密码和用户输入密码是否一致
+
+-->一致去调取授权的方法doGetAuthorizationInfo-->findRoleByUserId-->findPermissionByUserId
+
+-->authorizationInfo.add-->return authorizationInfo;	

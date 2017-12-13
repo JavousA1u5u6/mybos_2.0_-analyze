@@ -1,0 +1,180 @@
+Quartz，水晶、石英，一个简单朴素有美丽的名字，在Java程序界，Quartz大名鼎鼎，很多Java应用几乎都集成或构建了一个定时任务调度系统，Quartz是一个定时任务调度框架。
+
+何为定时任务调度框架？简而言之，它可以领会我们的意图在未来某个时刻做我们想要做的事情，比如，女友生日那天定时发送短信讨好下（当然，除此之外，你还要买买买…）。
+
+(本文章分享在CSDN平台，更多精彩请阅读 东陆之滇的csdn博客：http://blog.csdn.net/zixiao217)
+
+我们的应用程序有些定时任务（例如想在凌晨十二点半统计某个互联网金融公司一款借款APP前一天的借款、还款以及逾期情况）需要在指定时间内执行或者周期性执行某个任务（比如每月最后一天统计这个月的财务报表给财务部门等），这时候我们就需要用到任务调度框架了。Quartz正是一个炙手可热的任务调度框架，它简单易上手，并且可以与Spring集成（这才是重点）。
+
+现在，我们带着疑问开始认识Quartz…
+
+基本问题
+
+Quartz是什么？
+
+Quartz是一个任务调度框架(库)，它几乎可以集成到任何应用系统中。术语”job schedule”似乎为不同的人提供了不同的想法。当你阅读该教程时，你应该能够得到一个坚定的想法关于我们使用这个术语时表达含义，但总之，作业调度是负责执行（或通知）其他软件组件在预定时间执行的服务组件。
+
+Quartz是非常灵活的，并包含多个使用范例，它们可以单独或一起使用，以实现您所期望的行为，并使您能够以最“自然”的方式来编写您的项目的代码。
+
+Quartz是非常轻量级的，只需要非常少的配置 —— 它实际上可以被跳出框架来使用，如果你的需求是一些相对基本的简单的需求的话。
+
+Quartz具有容错机制，并且可以在重启服务的时候持久化（”记忆”）你的定时任务，你的任务也不会丢失。
+
+虽然通过schedule可以简单实现一些系统任务定时执行，当您学习如何使用它来驱动应用程序的业务流程的流程时，Quartz的全部潜力是可以实现的。
+
+Quartz又不是什么？
+
+Quartz不是一个任务队列——虽然它确实可以在一些小规模应用中合理的作为一个任务队列来使用。
+
+Quartz不是一个网格计算引擎——虽然在某些小规模应用中，这样做确实可以达到应用的要求（定时计算、统计一些数据）。
+
+Quartz不是一个提供给业务人员的执行服务——它是一个库，很容易集成到应用程序中去做一些未来某时刻可能会一直循环执行的相关的任务。
+
+从一个软件组件角度来看Quartz是什么？
+
+Quartz是一个很轻量级的java库，几乎包含了所有定时的功能。主要接口是Schedule，提供了一些简单的操作：安排任务或取消任务，启动或者停止任务。
+
+如果你想在应用中使用Quartz，应该实现Job接口，包含了一个execute()方法。如果你想在一个任务执行时间到了的时候通知你，组件应该实现TriggerListener 或者JobListener 接口。
+
+Quartz任务可以在你的应用中启动和执行，可以作为一个独立的应用程序（通过RMI接口），也可是在一个J2EE应用中执行。
+
+为什么不简单的使用just use java.util.Timer就行了呢？
+
+从JDK1.3开始，Java通过java.util.Timer和java.util.TimerTask可以实现定时器。为什么要使用Quartz而不是使用Java中的这些标准功能呢？
+
+原因太多了，这里列举几个：
+
+Timers没有持久化机制.
+Timers不灵活 (只可以设置开始时间和重复间隔，不是基于时间、日期、天等（秒、分、时）的)
+Timers 不能利用线程池，一个timer一个线程
+Timers没有真正的管理计划
+还有什么是可以替代Quartz的？
+
+商业上，你还可以使用 Flux scheduler
+
+其他问题
+
+Quartz可以运行多少任务？
+
+这是一个很难回答的问题…答案基本上是“它取决于使用情况” 
+我知道你讨厌这样的答案，所以这里的一些信息：
+
+首先，你使用的JobStore扮演着一个重要的因素。基于RAM的JobStore（100x）比基于JDBC的JobStore更快近乎100倍。JDBC JobStore速度几乎完全取决于您的数据库的连接速度，使用的数据库系统，以及数据库运行的硬件设备，Quartz几乎全部时间花在数据库上了。当然RAMJobStore存储多少Job和Triggers也是有限制的，你使用的空间肯定比数据库的硬盘空间要小了。你可以查看“如何提升JDBC-JobStore的性能”的问题。
+
+因此，限制Job和Triggers可以存储或监听的数量的因素是存储空间的大小（RAM的数量和磁盘空间大小）。
+
+关于通过RMI使用Quartz的问题
+
+RMI是有问题的，特别是你如果不清楚通过RMI机制时类是如何加载的话。强烈建议读读所有关于RMI的java API。强烈建议您阅读以下的参考资料： 
+一个关于RMI和代码库的极好描述： http://www.kedwards.com/jini/codebase.html。很重要的一点是要意识到“代码”是由客户端使用！
+
+关于安全管理器的一些信息： http://gethelp.devx.com/techtips/java_pro/10MinuteSolutions/10min0500.asp. 
+重要的一点： 
+RMI的类装载器将不会从远程位置下载任何类如果没有设置安全管理器的话。
+
+关于Job的一些问题
+
+如何控制Job的实例？
+
+可以查看org.quartz.spi.JobFactory和org.quartz.Scheduler.setJobFactory(..) 的方法。
+
+当一个Job完成并移除之后，还能保存吗？
+
+设置属性：JobDetail.setDurability(true)——当job不再有trigger引用它的时候，Quartz也不要删除job。
+
+如何保证一个job并发执行？
+
+实现StatefulJob 而不是Job，查看更多关于StatefulJob 的信息。
+
+如何停止一个正在执行的Job？
+
+查看org.quartz.InterruptableJob接口和Scheduler.interrupt(String, String)方法。
+
+关于Trigger的一些问题
+
+怎么执行任务链？或者说怎么创建工作流？
+
+目前还没有直接的或自由的方式通过Quartz链式触发任务。然而，有几种方法，你可以轻易的达到目标。
+
+方法一： 
+使用监听器（TriggerListener，JobListener 或者SchedulerListener），可以通知到某个工作完成，然后可以开始另一个任务。这种方式有一点复杂，你必须告知监听器哪个任务是接着哪个任务的，你可能还会担心这些信息的持久性。可以查看org.quartz.listeners.JobChainingJobListener，已经具有一些这样的功能了。 
+方法二： 
+创建一个Job，它的JobDataMap 包含下一个Job的名字，当这一个job执行完毕再执行下一个任务。大多数的做法是创建一个基类（通常是抽象类或接口）作为Job，并拥有获得job名称的方法，使用预定义的key从JobDataMap 进行分组。抽象类实现execute()方法委托模板方法例如”doWork()”去执行，它包含了调度后续作业的代码。之后子类要做的只是简单的扩展这个类，包括做自己应该做的工作。持久化job的使用，或者重载addJob(JobDetail, boolean, boolean) 方法(Qartz2.2新增的)帮助应用程序使用适当的数据来定义所有的工作，并没有创建触发器来激发他们（除了一个触发器触发外链中的第一个job）。 
+以后，Quartz 将会提供一个更简洁的方式处理这个流程，但是现在你可以考虑前面两种处理方式或其他更好的方式处理工作流。
+
+为什么我的触发器trigger没有执行？
+
+常见的原因可能是没有调用Scheduler.start()方法，这个方法它告诉调度程序启动触发器。还有一种可能是trigger或者trigger group被暂停了。
+
+夏令时和触发器
+
+CronTrigger 和SimpleTrigger以自己的方式处理夏令时——每一个方式，都是直观的触发类型。
+
+首先，了解下什么是夏令时，可以查看：https://secure.wikimedia.org/wikipedia/en/wiki/Daylight_saving_time_around_the_world。一些读者可能没意识到，不同的国家/内容的规则是不同的。举个例子，2005年的夏令时起始于4月3日（美国）而埃及是4月29。同样重要的是要知道，不同地区不仅仅是日期不同，日期转换（前一天和后一天的中国是零点）也是不同的。许多地方移在凌晨两点，但其他地方可能是凌晨1:00，凌晨3点等。
+
+SimpleTrigger可以让你安排一个任务在任何毫秒级执行。可以每N毫秒执行一次任务。总是每N秒就发生一次，与一天中的时间没有关系。 
+CronTrigger可以让你在某些时刻执行任务，是按”公历”时间计算的。在指定的一天中的时间触发，然后计算下一次触发的时间。
+
+关于JDBCJobStore的一些问题
+
+怎么提升JDBC-JobStore的性能？
+
+下面有一些提升JDBC-JobStore性能的方法，其中只有一种是有效的：
+
+使用更快更好的网络
+买一个更好的机器
+买一个更好的RDBMS
+现在，提供一种简单的但有效的方式：在Quartz表建立索引。
+
+很多数据库系统都会自动把索引放在主键字段上，许多数据库系统也会对外键也建立索引。确保你的数据库是这样做的，或者手动为表的关键字建立索引。 
+最重要的索引的TRIGGER 表的next_fire_time、state字段。最后但不是重要的，为FIRED_TRIGGERS 表的每一个字段设置索引。
+
+create index idx_qrtz_t_next_fire_time on qrtz_triggers(NEXT_FIRE_TIME);
+create index idx_qrtz_t_state on qrtz_triggers(TRIGGER_STATE);
+create index idx_qrtz_t_nf_st on qrtz_triggers(TRIGGER_STATE,NEXT_FIRE_TIME);
+create index idx_qrtz_ft_trig_name on qrtz_fired_triggers(TRIGGER_NAME);
+create index idx_qrtz_ft_trig_group on qrtz_fired_triggers(TRIGGER_GROUP);
+create index idx_qrtz_ft_trig_name on qrtz_fired_triggers(TRIGGER_NAME);
+create index idx_qrtz_ft_trig_n_g on \
+    qrtz_fired_triggers(TRIGGER_NAME,TRIGGER_GROUP);
+create index idx_qrtz_ft_trig_inst_name on qrtz_fired_triggers(INSTANCE_NAME);
+create index idx_qrtz_ft_job_name on qrtz_fired_triggers(JOB_NAME);
+create index idx_qrtz_ft_job_group on qrtz_fired_triggers(JOB_GROUP);
+create index idx_qrtz_t_next_fire_time_misfire on \
+    qrtz_triggers(MISFIRE_INSTR,NEXT_FIRE_TIME);
+create index idx_qrtz_t_nf_st_misfire on \
+    qrtz_triggers(MISFIRE_INSTR,NEXT_FIRE_TIME,TRIGGER_STATE);
+create index idx_qrtz_t_nf_st_misfire_grp on \
+    qrtz_triggers(MISFIRE_INSTR,NEXT_FIRE_TIME,TRIGGER_GROUP,TRIGGER_STATE);
+1
+17
+集群功能最适合于长时间运行和/或密集的工作(在多个节点上分配工作负载)，如果你需要扩展到支持成千上万的短运行（例如1秒）的工作，考虑工作集分割使用多个不同的调度器（因此多套表（有不同的前缀））。当你添加多个客户端的时候，使用一个调度程序将会强制使用一个集群锁，一个模式，降低性能。
+
+如果数据库服务器重新启动，我的数据库连接不会恢复正常
+
+如果您正在创建连接数据源（通过指定在Quartz属性文件中的连接参数），请确保您有一个指定的连接验证查询：
+
+org.quartz.dataSource.myDS.validationQuery=select 0 from dual
+1
+这个专门的查询语句对Orable数据库是非常有效的。其他的数据库，可以使用合适的sql。
+
+如果你的数据源是由您的应用程序服务器管理，确保数据源配置在这样一种方式，它可以检测连接失败。
+
+关于Transactions事务的一些问题
+
+使用JobStoreCMT，并且遇到死锁，该怎么办？
+
+JobStoreCMT 在大量使用，滥用可以导致死锁。不管怎样，我们总是抱怨死锁。到目前为止，该问题已被证明是“用户错误”。如果遇到死锁，下面的列表可能是你需要检查的事情了：
+
+当一个事务执行很长时间时，有些数据库会把它当成死锁。 确保你已经设置了索引 。
+确保在你的线程池中至少有两个以上数据库连接。
+确保你有一个托管的和非托管的数据源供Quartz使用。
+确保你在一个任务中处理的业务是在一个事务中。 处理完记得提交事务。
+如果你的 Jobs的 execute()方法 使用schedule, 确保使用UserTransaction或者设置Quartz属性："org.quartz.scheduler.wrapJobExecutionInUserTransaction=true".
+集群、规模化和高可用特性
+
+Quartz有什么集群能力？
+
+Quartz具有可扩展和高可用性功能。你可以在Quartz配置资料中找到答案：http://www.quartz-scheduler.org/documentation/quartz-2.2.x/configuration/
+
+其他的集群配置，不依赖后台数据库，Terracotta

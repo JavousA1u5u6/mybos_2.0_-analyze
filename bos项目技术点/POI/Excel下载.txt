@@ -1,0 +1,48 @@
+﻿@Action(value="export")
+public String export(){
+	//1.获取导出的数据
+	List<Area> rstList = areaService.findAll();
+	//2.创建一个工作簿
+	HSSFWorkbook workbook = new HSSFWorkbook();
+	//3.创建一个sheet
+	HSSFSheet sheet = workbook.createSheet("区域信息");
+	//4.准备第一行数据 --标题
+	HSSFRow row = sheet.createRow(0);
+	row.createCell(0).setCellValue("编号");
+	row.createCell(1).setCellValue("省");
+	row.createCell(2).setCellValue("市");
+	row.createCell(3).setCellValue("区");
+	row.createCell(4).setCellValue("邮编");
+	row.createCell(5).setCellValue("简码");
+	if(null != rstList && rstList.size()>0){
+		for(int i = 0 ; i < rstList.size(); i++){
+			Area area = rstList.get(i);
+			//创建Row
+			HSSFRow tempRow = sheet.createRow(i+1);
+			//写数据""
+			tempRow.createCell(0).setCellValue(area.getId());
+			tempRow.createCell(1).setCellValue(area.getProvince());
+			tempRow.createCell(2).setCellValue(area.getCity());
+			tempRow.createCell(3).setCellValue(area.getDistrict());
+			tempRow.createCell(4).setCellValue(area.getPostcode());
+			tempRow.createCell(5).setCellValue(area.getShortcode());
+		}
+	}
+	
+	//7.发送前台
+	try {
+		ServletOutputStream out = ServletActionContext.getResponse().getOutputStream();
+		//两个头
+		ServletActionContext.getResponse().setContentType("application/vnd.ms-excel;charset=utf-8");
+		String filename = "区域信息.xls";
+		//处理中文 让字节流指定的encoding 转化为字符串C
+		filename = new String(filename.getBytes(),"ISO8859-1");
+		//设置打开文件的方式，attachment：以附件下载的方式打开下载的文件
+		//	inline:在线打开文件
+		ServletActionContext.getResponse().setHeader("Content-Disposition", "attachment;filename="+filename);
+		workbook.write(out);
+	} catch (IOException e) {
+		e.printStackTrace();
+	}
+	return NONE;
+}

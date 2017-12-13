@@ -1,0 +1,9 @@
+formatter:function(value,rowData,rowIndex){
+
+//当前属性对应json数据值
+
+//rowDATA 当前行数据
+
+//rowIndex 第几行	
+
+}

@@ -1,0 +1,29 @@
+Linux下为UTF-8编码，javac编译gbk编码的java文件时，容易出现“错误: 编码UTF8的不可映射字符”
+解决方法是添加encoding 参数：javac -encoding gbk WordCount.java
+
+Windows下为GBK编码，javac编译utf-8编码的java文件时，容易出现“错误: 编码GBK的不可映射字符”
+解决方法是添加encoding 参数：javac -encoding utf-8 WordCount.java
+
+如果还不能解决，将其保存成ANSI编码
+首先记事本打开java源文件。然后另存为，选择ANSI编码。
+
+
+这是因为：由于JDK是国际版的，在编译的时候，
+如果我们没有用-encoding参数指定我们的JAVA源程序的编码格式，
+则javac.exe首先获得我们操作系统默认采用的编码格式，也即在编译java程序时，
+若我们不指定源程序文件的编码格式，
+JDK首先获得操作系统的file.encoding参数(它保存的就是操作系统默认的编码格式，如WIN2k，
+它的值为GBK)，
+然后JDK就把我们的java源程序从file.encoding编码格式转化为JAVA内部默认的UNICODE格式放入内存中。
+然后，javac把转换后的unicode格式的文件进行编译成.class类文件，此时.class文件是UNICODE编码的，
+它暂放在内存中，紧接着，
+JDK将此以UNICODE编码的编译后的class文件保存到我们的操作系统中形成我们见到的.class文件。
+对我们来说，我们最终获得的.class文件是内容以UNICODE编码格式保存的类文件，
+它内部包含我们源程序中的中文字符串，只不过此时它己经由file.encoding格式转化为UNICODE格式了。
+当我们不加设置就编译时，相当于使用了参数：javac -encoding gbk XX.java，当然就会出现不兼容的情况。
+
+总之来说就是一句话  如果不对java源文件指定encoding 编码的字符集  javadoc命令就会默认去执行  
+
+当前系统默认的字符集   而我们的系统一般都时中文系统 所以编码时gbk的 所以就会把java源文件按照encoder
+
+gbk 进行编码 这就会出现错误 不兼容的情况
